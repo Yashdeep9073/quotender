@@ -384,7 +384,7 @@ $q = mysqli_query($db, $q);
                                 ?>
 
                                 <br />
-                                <form action="" method="post" autocomplete="off" enctype="multipart/form-data" id="myForm">
+                                <form action="" method="post" autocomplete="off" enctype="multipart/form-data" id="myForm" autocomplete="off">
                                     <div class="col-lg-12">
 
                                         <?php
@@ -1356,6 +1356,7 @@ $q = mysqli_query($db, $q);
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
         </script>
+
         <script>
             $(document).ready(function() {
                 $("#goldmessage").delay(8000).slideUp(300);
@@ -1385,6 +1386,16 @@ $q = mysqli_query($db, $q);
         </script>
 
 
+<script>
+    // Check if the replaceState method is supported by the browser
+    if (window.history.replaceState) {
+        // Replace the current state in the browser's history with a new state
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+
+
+
 
 
 
@@ -1392,3 +1403,7 @@ $q = mysqli_query($db, $q);
 </body>
 
 </html>
+
+<?php
+    session_abort();
+?>

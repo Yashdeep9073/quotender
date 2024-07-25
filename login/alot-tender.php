@@ -16,12 +16,37 @@ inner join navigation_menus nm on ap.navigation_menu_id = nm.id where ap.admin_i
 $adminPermissionResult = mysqli_query($db, $adminPermissionQuery);
 $allowDelete=mysqli_num_rows($adminPermissionResult) > 0 ? true : false;
 
-$query = "SELECT sm.name, sm.email_id, sm.firm_name, sm.mobile, ur.tender_no, department.department_name,ur.name_of_work,
-ur.reminder_days, ur.allotted_at, ur.file_name, ur.id, ur.reference_code, ur.tenderID,ur.file_name2 FROM user_tender_requests ur 
-inner join members m on ur.member_id= m.member_id
-inner join members sm on ur.selected_user_id= sm.member_id
-inner join department on ur.department_id = department.department_id where ur.status= 'Allotted'";
-$result = mysqli_query($db, $query);
+$queryMain = "SELECT 
+sm.name, 
+sm.email_id,
+sm.firm_name,
+sm.mobile, 
+ur.tender_no, 
+department.department_name,
+ur.name_of_work,
+ur.reminder_days,
+ur.allotted_at,
+ur.file_name,
+ur.id, ur.reference_code,
+ur.tenderID,
+ur.file_name2,
+dv.division_name,
+se.section_name
+FROM 
+    user_tender_requests ur 
+inner join 
+    members m on ur.member_id= m.member_id
+inner join 
+    section se on ur.section_id = se.section_id
+inner join 
+    members sm on ur.selected_user_id= sm.member_id
+inner join 
+    division dv on dv.section_id = ur.section_id
+
+inner join 
+    department on ur.department_id = department.department_id where ur.status= 'Allotted'
+";
+$resultMain = mysqli_query($db, $queryMain);
 
 ?>
 
@@ -155,30 +180,27 @@ $result = mysqli_query($db, $query);
                                 ?>
                                 <br />
                                 <?php
-                                 if($allowDelete==true){
+                                if($allowDelete==true){
                                 echo "<div class='col-md row'>
                                 <a href='#' id='delete_records' class='btn btn-danger'> <i class='feather icon-trash'></i>  &nbsp;
                                 Delete Selected Items</a>
                                 </div> <br />";
-                                 }
+                                }
+                                
                                 echo '<table id="basic-btn" class="table table-striped table-bordered">';
                                 echo "<thead>";
                                 echo "<tr>";
                                 echo "<th>SNO</th>";
                                 echo "<th>User</th>";
-                                 echo "<th>Email</th>";
-                                  echo "<th>Firm</th>";
-                                   echo "<th>Mobile</th>";
-                              
-                                  echo "<th>Tender ID</th>";
-                                     echo "<th>Ref. Code </th>";
+                                echo "<th>Email</th>";
+                                echo "<th>Firm</th>";
+                                echo "<th>Mobile</th>";
+                                echo "<th>Tender ID</th>";
+                                echo "<th>Ref. Code </th>";
                                 echo "<th>Tender No</th>";
-                                
                                 echo "<th>Department</th>";
-                                
-                                 echo "<th>Division</th>";
-                                   echo "<th>Section</th>";
-                                
+                                echo "<th>Division</th>";
+                                echo "<th>Section</th>";
                                 echo "<th>Work Name</th>";
                                 echo "<th>Reminder</th>";
                                 echo "<th>Edit</th>";
@@ -188,45 +210,25 @@ $result = mysqli_query($db, $query);
                                 <?php
                                 $count = 1;
                                 echo "<tbody>";
-                                while ($row = mysqli_fetch_row($result)) {
+                                while ($row = mysqli_fetch_row($resultMain)) {
 
                                     echo "<tr class='record'>";
                                     echo "<td><div class='custom-control custom-checkbox'>
                                     <input type='checkbox' class='custom-control-input request_checkbox' id='customCheck" .  $count . "' data-request-id='" . $row[10] . "'>
                                     <label class='custom-control-label' for='customCheck" .  $count . "'>" . $count . "</label>
-                                </div>
-                                </td>";
-                         
-                                    
-                                    
-                                    
-                                      echo "<td><span style='color:red;'> " . $row['0'] . " </span></td>";
-                                      
-                                        echo "<td>  <span style='color:green;'>" . $row['1'] . " </span></td>";
-                                        
-                                        
-                                          echo "<td>" . $row['2'] . "</td>";
-                                          
-                                            echo "<td>" . $row['3'] . "</td>";
-                                    
-                                    
-                                    
-echo "<td>" . $row['12'] . "</td>";
+                                    </div>
+                                    </td>";
 
-
-
-
-
-
-
-     echo "<td>" . $row['11'] . "</td>";
-                                    echo "<td>" . $row['4'] . "</td>";
-                                    
-                                
-                                      
+                                    echo "<td><span style='color:red;'> " . $row['0'] . " </span></td>";
+                                    echo "<td>  <span style='color:green;'>" . $row['1'] . " </span></td>";    
+                                    echo "<td>" . $row['2'] . "</td>";
+                                    echo "<td>" . $row['3'] . "</td>";
+                                    echo "<td>" . $row['12'] . "</td>";
+                                    echo "<td>" . $row['11'] . "</td>";
+                                    echo "<td>" . $row['4'] . "</td>";    
                                     echo "<td>" . $row['5'] . "</td>";
-                                    echo "<td>" . $row['5'] . "</td>";
-                                    echo "<td>" . $row['5'] . "</td>";
+                                    echo "<td>" . $row['14'] . "</td>";
+                                    echo "<td>" . $row['15'] . "</td>";
                                     echo "<td style='white-space:pre-wrap; word-wrap:break-word; max-width:20rem;'>"  . $row['6'] . "</td>";
 
                                     echo "<td>" . "<span class='btn btn-success'>" . $row[7] . " days</span>" . "<br/><br/>" .
@@ -240,9 +242,10 @@ echo "<td>" . $row['12'] . "</td>";
 
                                     $res = $row[10];
                                     $res = base64_encode($res);
+                                    
                                     echo "<td>  <a href='alot-tender-update.php?id=$res'><button type='button' class='btn btn-warning'>
                                     <i class='feather icon-edit'></i> &nbsp;Re-Alot</button></a>  &nbsp;";
-echo "<br/>";echo "<br/>";
+                                    echo "<br/>";echo "<br/>";
                                     if($allowDelete==true){
                                     echo   "<a href='#' id='".$row['10']."'class='delbutton btn btn-danger' title='Click To Delete'> 
                                     <i class='feather icon-trash'></i>  &nbsp; delete</a></td>";

@@ -6,6 +6,7 @@ session_start();
 if (!isset($_SESSION["login_user"])) {
     header("location: index.php");
 }
+    
 $name = $_SESSION['login_user'];
 
 include("db/config.php");
