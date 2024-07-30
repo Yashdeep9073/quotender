@@ -7,8 +7,8 @@ use PHPMailer\PHPMailer\Exception;
 
 
 
-$en = $_POST["tender_sent_ids"];
-
+$en = $_POST["tender_sent_ids"]; // Comma-separated string of tender IDs
+$tenderIDs = explode(',', $en); // Split the string into an array of tender IDs
 
 $stat = 1;
 $re = base64_encode($stat);
@@ -62,8 +62,10 @@ if (isset($en)){
     $mail->addAddress($adminEmail);
     $mail->IsHTML(true);
 
+    foreach($tenderIDs as $id){
+    $id = trim($id);
     $membersQuery = "SELECT m.email_id,  m.name, ur.file_name, ur.file_name2, ur.tenderID, ur.id FROM user_tender_requests ur 
-    inner join members m on ur.member_id= m.member_id  WHERE ur.id='"  . $en . "'";
+    inner join members m on ur.member_id= m.member_id  WHERE ur.id='"  . $id. "'";
     $membersResult = mysqli_query($db, $membersQuery);
     $memberData = mysqli_fetch_row($membersResult);
 
@@ -75,7 +77,7 @@ if (isset($en)){
     if(!empty($memberData[3])){
     $mail->addAttachment($upload_directory.$memberData[3]);
     }
-    $mail->Body =  "<p> Dear user, <br/>" .
+    $mail->Body =  "<p> Dear " . $memberData[1] . ", <br/>" .  
     "The <b>Tender ID: </b> " .  $memberData[4] . "</b>  has been approved to you. Quotation file is attached below. For the further process, feel free to contact us.<br/><br/>
     <strong>Thanks, <br /> Admin Quote Tender</strong> <br/>
     Mobile: +91-9417601244 | Email: info@quotender.com ";
@@ -84,6 +86,8 @@ if (isset($en)){
 
         echo "Mailer Error: " . $mail->ErrorInfo;
     }
+
+}
 
     echo ("<SCRIPT LANGUAGE='JavaScript'>
     window.location.href='tender-request.php?status=$re';

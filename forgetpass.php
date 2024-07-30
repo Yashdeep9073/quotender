@@ -96,7 +96,7 @@ $q = mysqli_query($db, $q);
                         <input type="email" placeholder="Enter Registered Email Id" required name="reset">
                     </div>
                     <div class="form-group">
-                        <div class="g-recaptcha" data-sitekey="6LeU6_onAAAAAHww3mhv2t_IHWYMUzdJqystos_z"
+                        <div class="g-recaptcha" data-sitekey="6LeyShEqAAAAAJIMoyXfN7DmfesxwLNYOgBHIh4N"
                             data-callback="callback" style="border:none;">
                         </div>
                     </div>

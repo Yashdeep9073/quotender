@@ -22,11 +22,27 @@ while ($row = mysqli_fetch_row($adminPermissionResult)) {
 $allowedAction=!in_array('All',$userPermissions) && in_array( 'Update Tenders',$userPermissions) ? 'update' :
  (!in_array('All',$userPermissions) && in_array( 'View Tenders',$userPermissions) ? 'view' : 'all');
 
-$query = "SELECT m.name, m.member_id, m.firm_name, m.mobile, m.email_id, department.department_name, 
-ur.due_date, ur.file_name, ur.tenderID, ur.created_at, ur.id,ur.file_name2 FROM user_tender_requests ur 
-inner join members m on ur.member_id= m.member_id
-inner join department on ur.department_id = department.department_id where ur.status= 'Requested' ORDER BY NOW() >= CAST(ur.due_date AS DATE),
+$query = "SELECT DISTINCT
+m.name, 
+m.member_id, 
+m.firm_name, 
+m.mobile, 
+m.email_id, 
+department.department_name, 
+ur.due_date, 
+ur.file_name, 
+ur.tenderID, 
+ur.created_at, 
+ur.id,
+ur.file_name2 
+FROM 
+    user_tender_requests ur 
+inner join 
+    members m on ur.member_id= m.member_id
+inner join 
+    department on ur.department_id = department.department_id where ur.status= 'Requested' ORDER BY NOW() >= CAST(ur.due_date AS DATE),
 ABS(DATEDIFF(NOW(), CAST(ur.due_date AS DATE)))";
+
 $result = mysqli_query($db, $query);
 
 
@@ -321,12 +337,11 @@ $result = mysqli_query($db, $query);
         $(function() {
 
             $(".delbutton").click(function() {
+                let element = $(this);
 
-                var element = $(this);
+                let del_id = element.attr("id");
 
-                var del_id = element.attr("id");
-
-                var info = 'id=' + del_id;
+                let info = 'id=' + del_id;
                 if (confirm("Are you sure you want to delete this Record?")) {
                     $.ajax({
                         type: "GET",
@@ -340,29 +355,47 @@ $result = mysqli_query($db, $query);
                         .animate({
                             opacity: "hide"
                         }, "slow");
+                    setTimeout(function () {
+                        window.location.reload();
+                    },2000);
                 }
                 return false;
             });
 
             $('#delete_records').on('click', function(e) {
-                var requestIDs = [];
+                let requestIDs = [];
+
                 $(".request_checkbox:checked").each(function() {
                     requestIDs.push($(this).data('request-id'));
                 });
+
                 if (requestIDs.length <= 0) {
                     alert("Please select records.");
-                } else {
+                } 
+                else {
                     WRN_PROFILE_DELETE = "Are you sure you want to delete " + (requestIDs.length > 1 ? "these" : "this") + " Record?";
-                    var checked = confirm(WRN_PROFILE_DELETE);
+                    let checked = confirm(WRN_PROFILE_DELETE);
                     if (checked == true) {
-                        var selected_values = requestIDs.join(",");
+                        let selected_values = requestIDs.join(",");
                         $.ajax({
                             type: "POST",
                             url: "deleteuser.php",
                             cache: false,
                             data: 'tender_request_ids=' + selected_values,
                             success: function() {
-                                window.location.reload();
+                                $(".request_checkbox:checked").each(function(){
+                                    $(this).closest(".record").animate({
+                                        backgroundColor:"#FF3"
+                                    },"fast").animate({
+                                        opacity:"hide"
+                                    },"slow",function(){
+                                        $(this).remove();
+                                    });
+                                });
+                                setInterval(function(){
+                                    window.location.reload();
+                                },2000);
+                                
                             }
                         });
                     }
@@ -370,19 +403,32 @@ $result = mysqli_query($db, $query);
             });
 
             $('.update_records').on('click', function(e) {
-                var updateIDs = [];
+                let updateIDs = [];
                 if ($(".request_checkbox:checked").length == 0){
                     alert("Please select records.");
                 }
+
                 $(".request_checkbox:checked").each(function() {
                     updateIDs.push($(this).data('request-id'));
+
                     $('.update_records').attr('href',"update-tender-requests.php?tenderIds="+btoa(updateIDs));
                     console.log(updateIDs);
                 });
+
+                let selected_values = requestIDs.join(",");
+                $.ajax({
+                    type: "GET",
+                    url:"update-tender-requests.php",
+                    cache:false,
+                    data:"tenderIds" + selected_values,
+                })
+
+                
             });
         });
     </script>
 
+    
 
 </body>
 

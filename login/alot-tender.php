@@ -16,7 +16,7 @@ inner join navigation_menus nm on ap.navigation_menu_id = nm.id where ap.admin_i
 $adminPermissionResult = mysqli_query($db, $adminPermissionQuery);
 $allowDelete=mysqli_num_rows($adminPermissionResult) > 0 ? true : false;
 
-$queryMain = "SELECT 
+$queryMain = "SELECT DISTINCT
 sm.name, 
 sm.email_id,
 sm.firm_name,
@@ -27,24 +27,33 @@ ur.name_of_work,
 ur.reminder_days,
 ur.allotted_at,
 ur.file_name,
-ur.id, ur.reference_code,
+ur.id, 
+ur.reference_code,
 ur.tenderID,
 ur.file_name2,
 dv.division_name,
-se.section_name
+se.section_name,
+sd.subdivision
 FROM 
     user_tender_requests ur 
 inner join 
     members m on ur.member_id= m.member_id
+inner join 
+    department on ur.department_id = department.department_id 
 inner join 
     section se on ur.section_id = se.section_id
 inner join 
     members sm on ur.selected_user_id= sm.member_id
 inner join 
     division dv on dv.section_id = ur.section_id
-
-inner join 
-    department on ur.department_id = department.department_id where ur.status= 'Allotted'
+INNER JOIN 
+    sub_division sd ON ur.division_id = sd.division_id
+where ur.status= 'Allotted'
+GROUP BY 
+ ur.id
+ORDER BY 
+ NOW() >= CAST(ur.due_date AS DATE), 
+ ABS(DATEDIFF(NOW(), CAST(ur.due_date AS DATE)))
 ";
 $resultMain = mysqli_query($db, $queryMain);
 
@@ -199,8 +208,9 @@ $resultMain = mysqli_query($db, $queryMain);
                                 echo "<th>Ref. Code </th>";
                                 echo "<th>Tender No</th>";
                                 echo "<th>Department</th>";
-                                echo "<th>Division</th>";
                                 echo "<th>Section</th>";
+                                echo "<th>Division</th>";
+                                echo "<th>Sub-division</th>";
                                 echo "<th>Work Name</th>";
                                 echo "<th>Reminder</th>";
                                 echo "<th>Edit</th>";
@@ -227,8 +237,9 @@ $resultMain = mysqli_query($db, $queryMain);
                                     echo "<td>" . $row['11'] . "</td>";
                                     echo "<td>" . $row['4'] . "</td>";    
                                     echo "<td>" . $row['5'] . "</td>";
-                                    echo "<td>" . $row['14'] . "</td>";
                                     echo "<td>" . $row['15'] . "</td>";
+                                    echo "<td>" . $row['14'] . "</td>";
+                                    echo "<td>" . $row['16'] . "</td>";
                                     echo "<td style='white-space:pre-wrap; word-wrap:break-word; max-width:20rem;'>"  . $row['6'] . "</td>";
 
                                     echo "<td>" . "<span class='btn btn-success'>" . $row[7] . " days</span>" . "<br/><br/>" .
@@ -310,6 +321,10 @@ $resultMain = mysqli_query($db, $queryMain);
                         .animate({
                             opacity: "hide"
                         }, "slow");
+
+                        setTimeout(function(){
+                            window.location.reload()
+                        },2000);
                 }
                 return false;
             });
@@ -332,7 +347,18 @@ $resultMain = mysqli_query($db, $queryMain);
                             cache: false,
                             data: 'alot_request_ids=' + selected_values,
                             success: function() {
-                                window.location.reload();
+                                $(".request_checkbox:checked").each(function(){
+                                    $(this).closest(".record").animate({
+                                        backgroundColor:"#FF3"
+                                    },"fast").animate({
+                                        opacity:"hide"
+                                    },"slow",function(){
+                                        $(this).remove();
+                                    });
+                                });
+                                setTimeout(function(){
+                                    window.location.reload();},
+                                    2000);
                             }
                         });
                     }

@@ -174,6 +174,7 @@ while ($item = mysqli_fetch_row($adminPermissionResult)) {
                 <li class="nav-item">
                     <a href="registered-users.php" class="nav-link "><span class="pcoded-micon"><i class="feather icon-globe"></i></span><span class="">Registered Users</span></a>
                 </li>
+                
                 <?php } ?>
 
                 <?php if ((in_array('Add Banner', $permissions)) || (in_array('Manage Banner', $permissions))

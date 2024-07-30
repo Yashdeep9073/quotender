@@ -22,42 +22,49 @@ while ($row = mysqli_fetch_row($adminPermissionResult)) {
 $allowedAction=!in_array('All',$userPermissions) && in_array( 'Update Tenders',$userPermissions) ? 'update' :
  (!in_array('All',$userPermissions) && in_array( 'View Tenders',$userPermissions) ? 'view' : 'all');
 
-$query = "SELECT 
-    m.name, 
-    m.firm_name, 
-    m.mobile, 
-    ur.tender_no, 
-    dept.department_name, 
-    ur.name_of_work,
-    ur.due_date, 
-    ur.created_at, 
-    ur.sent_at, 
-    ur.file_name, 
-    ur.tenderID, 
-    ur.id, 
-    ur.reference_code, 
-    ur.file_name2, 
-    ur.tentative_cost, 
-    ur.section_id, 
-    ur.division_id,
-    s.section_name,
-    dv.division_name
+ $query = "SELECT DISTINCT
+ m.name, 
+ m.firm_name, 
+ m.mobile, 
+ ur.tender_no, 
+ dept.department_name, 
+ ur.name_of_work,
+ ur.due_date, 
+ ur.created_at, 
+ ur.sent_at, 
+ ur.file_name, 
+ ur.tenderID, 
+ ur.id, 
+ ur.reference_code, 
+ ur.file_name2, 
+ ur.tentative_cost, 
+ ur.section_id, 
+ ur.division_id,
+ s.section_name,
+ dv.division_name,
+ sd.subdivision,
+ ur.auto_quotation
 FROM 
-    user_tender_requests ur
+ user_tender_requests ur
 INNER JOIN 
-    members m ON ur.member_id = m.member_id
+ members m ON ur.member_id = m.member_id
 INNER JOIN 
-    division dv ON ur.division_id = dv.division_id
+ department dept ON ur.department_id = dept.department_id
 INNER JOIN 
-    section s ON ur.section_id = s.section_id
+ section s ON ur.section_id = s.section_id
 INNER JOIN 
-    department dept ON ur.department_id = dept.department_id
+ division dv ON ur.section_id = dv.section_id
+INNER JOIN
+ sub_division sd ON ur.division_id = sd.division_id
 WHERE 
-    ur.status = 'Sent'
+ ur.status = 'Sent'
+GROUP BY 
+ ur.id
 ORDER BY 
-    NOW() >= CAST(ur.due_date AS DATE), 
-    ABS(DATEDIFF(NOW(), CAST(ur.due_date AS DATE)));
+ NOW() >= CAST(ur.due_date AS DATE), 
+ ABS(DATEDIFF(NOW(), CAST(ur.due_date AS DATE)))
 ";
+
 $result = mysqli_query($db, $query);
 
 
@@ -285,11 +292,9 @@ $result = mysqli_query($db, $query);
                                  echo "<th>Ref. Code </th>";
                                 echo "<th>Tender No</th>";
                                 echo "<th>Department</th>";
-                                
                                 echo "<th>Section</th>";
-                                
-                                   echo "<th>Division</th>";
-                                
+                                echo "<th>Division</th>";
+                                echo "<th>Sub-division</th>";
                                 echo "<th>Work Name</th>";
                                 echo "<th>Tentative Cost</th>";
                                 echo "<th>Due Date</th>";
@@ -311,13 +316,13 @@ $result = mysqli_query($db, $query);
 
                                 echo "<tbody>";
 
-                                while ($row = mysqli_fetch_row($result)) {
+                                while ($row = mysqli_fetch_assoc($result)) {
 
                                     echo "<tr class='record'>";
                                     echo "<td>
                                     <div class='custom-control custom-checkbox'>
-                                    <input type='checkbox' class='custom-control-input request_checkbox' id='customCheck" . $row[11] . "'  data-request-id='" . $row[11] . "'>
-                                    <label class='custom-control-label' for='customCheck" .  $row[11] . "'>" . $count . "</label>
+                                    <input type='checkbox' class='custom-control-input request_checkbox' id='customCheck" . $row['id'] . "'  data-request-id='" . $row['id'] . "'>
+                                    <label class='custom-control-label' for='customCheck" .  $row['id'] . "'>" . $count . "</label>
                                     </div>
                                     </td>";
 
@@ -325,40 +330,43 @@ $result = mysqli_query($db, $query);
                                     
                                     
                                     
-                                    echo "<td> <span style='color:red;'>" . $row['0'] . "</td>";
-                                    echo "<td> <span style='color:green;'> " . $row['1'] . "</td>";
+                                    echo "<td> <span style='color:red;'>" . $row['name'] . "</td>";
+                                    echo "<td> <span style='color:green;'> " . $row['firm_name'] . "</td>";
                                     
-                                    echo "<td>" . $row['2'] . "</td>";
+                                    echo "<td>" . $row['mobile'] . "</td>";
                                     
                                     
-                                    echo "<td>" . $row['10'] . "</td>";
-                                      echo "<td>" . $row['12'] . "</td>";
+                                    echo "<td>" . $row['tenderID'] . "</td>";
+                                      echo "<td>" . $row['reference_code'] . "</td>";
                                     
-                                    echo "<td>" . $row['3'] . "</td>";
+                                    echo "<td>" . $row['tender_no'] . "</td>";
                                     
                                    
-                                    echo "<td>" . $row['4'] . "</td>";
-                                     echo "<td>" . $row['17'] . "</td>";
-                                     echo "<td>" . $row['18'] . "</td>";
-
-                                    echo "<td style='white-space:pre-wrap; word-wrap:break-word; max-width:100rem;'>" . $row['5'] . "</td>";
-                                    if($row['14']){
-                                        echo "<td>" . $row['14'] . "</td>";
+                                    echo "<td>" . $row['department_name'] . "</td>";
+                                     echo "<td>" . $row['section_name'] . "</td>";
+                                     echo "<td>" . $row['division_name'] . "</td>";
+                                     echo "<td>" . $row['subdivision'] . "</td>";
+                                    echo "<td style='white-space:pre-wrap; word-wrap:break-word; max-width:100rem;'>" . $row['name_of_work'] . "</td>";
+                                    
+                                    if($row['tentative_cost']){
+                                        echo "<td>" . $row['tentative_cost'] . "</td>";
                                     }else{
                                         echo "<td>-</td>";
                                     }
-                                    echo "<td>" . date_format(date_create($row['6']),"d-m-Y ") . "</td>";
-                                    echo "<td>" . date_format(date_create($row['7']),"d-m-Y:h:i A ") . "</td>";
 
-                                    echo "<td>" .date_format(date_create($row['8']),"d-m-Y ") . "<br/>" . '<a href="../login/tender/' . $row['9'] . '"  target="_blank"/>View file 1 </a> </br> ' ;
-                                    if (!empty($row['13'])) {
-                                        echo  '<a href="../login/tender/' . $row['13'] . '" target="_blank"/>View File 2 </a>' . "</td>";
+                                    echo "<td>" . date_format(date_create($row['due_date']),"d-m-Y ") . "</td>";
+                                    echo "<td>" . date_format(date_create($row['created_at']),"d-m-Y:h:i A ") . "</td>";
+
+                                    echo "<td>" .date_format(date_create($row['sent_at']),"d-m-Y ") . "<br/>" . '<a href="../login/tender/' . $row['file_name'] . '"  target="_blank"/>View file 1 </a> </br> ' ;
+
+                                    if (!empty($row['file_name2'])) {
+                                        echo  '<a href="../login/tender/' . $row['file_name2'] . '" target="_blank"/>View File 2 </a>' . "</td>";
                                     }else{
                                         echo "</td>";
                                     }
 
 
-                                    $res = $row[11];
+                                    $res = $row["id"];
                                     $res = base64_encode($res);
                                     
 
@@ -370,21 +378,33 @@ $result = mysqli_query($db, $query);
                                     echo "<br/>";echo "<br/>";
 
                                     if($allowedAction=='all'){
-                                        echo "<a href='#' id='" . $row['11'] . "'class='delbutton btn btn-danger' title='Click To Delete'> 
+                                        echo "<a href='#' id='" . $row['id'] . "'class='delbutton btn btn-danger' title='Click To Delete'> 
                                         <i class='feather icon-trash'></i>  &nbsp; delete</a></td>";
                                     }
-                                    echo "<td>  <a href='#'><button type='button' id='" . $row['11'] . "' class= 'mail btn btn-success'><i class='feather icon-mail'></i>
-                                      &nbsp;Sent Mail</button></a>  &nbsp;";
                                     
+                                    if($row['auto_quotation'] != 1){
+                                    echo "<td>  
+                                    <a href='#'><button type='button' id='" . $row['id'] . "' class= 'mail btn btn-success'><i class='feather icon-mail'></i>
+                                    &nbsp;Sent Mail</button></a>  &nbsp;";
                                     
-                                    
-                                        
-                                            
                                     echo "<br/>";echo "<br/>";
                                     
-                                    echo "<button type='button' class='btn btn-danger'><i class='feather icon-edit'></i>
-                                        &nbsp;No Reply</button></a></td>";
+                                    echo "<p  class='btn btn-light'><i class='feather icon-repeat'></i>
+                                        &nbsp;Auto Email OFF</p></a>
+                                        
+                                    </td>";
+                                    }else{
+                                        echo "<td>  
+                                    <a href='#'><button type='button' id='" . $row['id'] . "' class= 'mail btn btn-success' disabled><i class='feather icon-mail'></i>
+                                    &nbsp;Sent Mail</button></a>  &nbsp;";
                                     
+                                    echo "<br/>";echo "<br/>";
+                                    
+                                    echo "<p  class='btn btn-light'><i class='feather icon-repeat'></i>
+                                        &nbsp;Auto Email ON</p></a>
+                                        
+                                    </td>";
+                                    }
                                     
                         
 
@@ -470,6 +490,8 @@ $result = mysqli_query($db, $query);
                     .animate({
                         opacity: "hide"
                     }, "slow");
+
+                    setTimeout(function(){window.location.reload();},2000);
             }
             return false;
         });
@@ -526,17 +548,20 @@ $result = mysqli_query($db, $query);
                             cache: false,
                             data: 'tender_sent_ids=' + selected_values,
                             success: function() {
-                                // window.location.reload();
-                        
-                        $(".request_checkbox:checked").each(function(){
-                            $(this).closest(".record").animate({
-                                backgroundColor:"#FF3"
-                            },"fast").animate({
-                                opacity:"hide"
-                            },"slow",function(){
-                                $(this).remove();
-                            });
-                        });
+                                
+                                $(".request_checkbox:checked").each(function(){
+                                    $(this).closest(".record").animate({
+                                        backgroundColor:"#FF3"
+                                    },"fast").animate({
+                                        opacity:"hide"
+                                    },"slow",function(){
+                                        $(this).remove();
+                                    });
+                                });
+                                setTimeout(function(){
+                                    window.location.reload();},
+                                    2000);
+                                
                             }
                         });
                     }

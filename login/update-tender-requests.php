@@ -24,13 +24,16 @@ if (isset($_GET['tenderIds'])) {
     header("location: tender-request.php");
 }
 
+$en = $_GET['tenderIds'];
+$d = base64_decode($_GET['tenderIds']);
+
 if (isset($_POST['submit'])) {
     $tender = $_POST['tenderno'];
     $code = $_POST['code'];
     $work = $_POST['work'];
     $tender1 = $_POST['tender'];
     $dept = $_POST['department'];
-
+    $autoEmail2 = $_POST['autoEmail'];
     $section = $_POST['coutrycode'];
     $division_id = $_POST['statelist'];
     $sub_division_id = $_POST['city'];
@@ -104,16 +107,23 @@ if (isset($_POST['submit'])) {
                 // move_uploaded_file($temp_name, $upload_directory . $unique_filename);
 
 
-                mysqli_query($db, "UPDATE user_tender_requests set `tender_no` ='$tender', `reference_code`='$code',`tenderID`='$tender1',
+            mysqli_query($db, "UPDATE user_tender_requests set `tender_no` ='$tender', `reference_code`='$code',`tenderID`='$tender1',
             `tentative_cost`='$tentative_cost',`department_id`='$dept',`section_id`='$section',`sub_division_id`='$sub_division_id',`division_id`='$division_id',`name_of_work`='$work',
-            `file_name`='$unique_filename1',`file_name2`='$unique_filename2',`status`='Sent', `sent_at`='$sent_at' WHERE `id`='"  . $updateTenderId . "'");
+            `file_name`='$unique_filename1',`file_name2`='$unique_filename2',`status`='Sent', `sent_at`='$sent_at' , `auto_quotation`='$autoEmail2' WHERE `id`='"  . $updateTenderId . "'");
 
                 $continueWithMail = true;
             }
+            
             $stat = 1;
             $re = base64_encode($stat);
+            
+            
+            //auto quotation 
+            $autoEmailQuery3 = mysqli_query($db,"SELECT `auto_quotation` FROM user_tender_requests WHERE `id`= '"  . $d . "' ");
+            $autoEmailResult3 = mysqli_fetch_assoc($autoEmailQuery3); 
+            $autoEmailResponse3 = $autoEmailResult3["auto_quotation"];
 
-            if ($continueWithMail == true) {
+            if ($autoEmailResponse3 == '1' and $continueWithMail = true) {
                 $mail = new PHPMailer(true);
 
                 //Enable SMTP debugging.
@@ -188,12 +198,12 @@ if (isset($_POST['submit'])) {
                 echo ("<SCRIPT LANGUAGE='JavaScript'>
                 window.location.href='tender-request.php?status=$re';
                 </SCRIPT>");
-                
             }
 
             echo ("<SCRIPT LANGUAGE='JavaScript'>
-            window.location.href='tender-request.php?status=0';
+            window.location.href='tender-request.php?status=$re';
             </SCRIPT>");
+
 
         } else {
             $msg = "<div class='alert alert-danger alert-dismissible fade show' role='alert' style='font-size:16px;' id='goldmessage'>
@@ -488,12 +498,12 @@ $sections = mysqli_query($db, $sectionQuery);
                                         
                                           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 
-                                            <div class="form-group"> Sent Email Automatically
+                                            <div class="form-group">Send Quotation Auotmatically
 
-                                                <select name="city" id="city" class="form-control">
+                                                <select name="autoEmail" id="city" class="form-control">
                                                     <option value="">Select </option>
-                                                      <option value="">Yes</option>
-                                                        <option value="">No</option>
+                                                      <option value="1">Yes</option>
+                                                        <option value="0">No</option>
                                                 </select>
                                             </div>
                                         </div>

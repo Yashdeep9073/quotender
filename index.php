@@ -120,33 +120,58 @@ if (isset($_POST['submit'])) {
             }
 
 
-            $tenderExistsQuery = "SELECT ur.file_name, ur.tenderID, ur.tender_no, ur.reference_code, ur.section_id, ur.sub_division_id,
-            ur.division_id, ur.name_of_work, ur.file_name
-            FROM user_tender_requests ur WHERE (ur.status='Sent' Or ur.status='Allotted') AND ur.tenderID='"  . $tender . "'
+            $tenderExistsQuery = "SELECT 
+            ur.file_name,
+            ur.tenderID, 
+            ur.tender_no, 
+            ur.reference_code, 
+            ur.section_id, 
+            ur.sub_division_id,
+            ur.division_id, 
+            ur.name_of_work, 
+            ur.file_name,
+            tentative_cost,
+            ur.auto_quotation,
+            ur.member_id
+            FROM user_tender_requests ur WHERE (ur.status='Sent' Or ur.status='Allotted') AND (ur.tenderID='"  . $tender . "' AND ur.auto_quotation = '1')
             ORDER BY created_at DESC limit 1";
 
             $tenderExistsResult = mysqli_query($db, $tenderExistsQuery);
+            $rowTender = mysqli_num_rows($tenderExistsResult);
+            
+            $userExist = mysqli_query($db,"SELECT * FROM user_tender_requests ur WHERE ur.tenderID='"  . $tender . "' AND ur.member_id = '$member_id'");
+            $userExistResult = mysqli_num_rows($userExist);
 
-            if (mysqli_num_rows($tenderExistsResult) > 0) {
-                $sent_at = date('Y-m-d H:i:s');
-                $tenderQuote = mysqli_fetch_row($tenderExistsResult);
-
-                $query = "insert into user_tender_requests (member_id, tenderID, department_id, due_date, file_name, status, tender_no, reference_code,
-                section_id, sub_division_id, division_id, name_of_work,sent_at) 
-                values('$member_id','$tender','$department_id','$due_date','$tenderQuote[0]','Sent','$tenderQuote[2]','$tenderQuote[3]','$tenderQuote[4]',
-                '$tenderQuote[5]','$tenderQuote[6]','$tenderQuote[7]','$sent_at')";
-                mysqli_query($db, $query);
+            if($userExistResult == 1){
+                $msg = "<div class='alert alert-danger alert-dismissible fade show' role='alert' style='font-size:16px;' id='goldmessage'>
+                <strong><i class='feather icon-check'></i>Error!</strong>You already sent request on this tender Id.
+                </div>
+                ";
             }
+            else{
 
-            if ((mysqli_num_rows($tenderExistsResult) == 0) && ($fileUploaded1 == true || $fileUploaded2==true || (empty($_FILES["uploaded_file"]["tmp_name"])))) {
+                    if ($rowTender > 0) {
+                        $sent_at = date('Y-m-d H:i:s');
+                        $tenderQuote = mysqli_fetch_row($tenderExistsResult);
+                    
+                        $query = "insert into user_tender_requests (member_id, tenderID, department_id, due_date, file_name, status, tender_no, reference_code,
+                        section_id, sub_division_id, division_id, name_of_work,sent_at,tentative_cost,auto_quotation) 
+                        values('$member_id','$tender','$department_id','$due_date','$tenderQuote[0]','Sent','$tenderQuote[2]','$tenderQuote[3]','$tenderQuote[4]',
+                        '$tenderQuote[5]','$tenderQuote[6]','$tenderQuote[7]','$sent_at','$tenderQuote[9]','$tenderQuote[10]')";
+                        mysqli_query($db, $query);
+                    }
+        
 
-                $query = "insert into user_tender_requests (member_id, tenderID, department_id, due_date, file_name,status,file_name2) 
-            values('$member_id','$tender','$department_id','$due_date','$unique_filename1','Requested','$unique_filename2')";
-                mysqli_query($db, $query);
-
-
-                mysqli_query($db, "UPDATE members set `pending_request` ='$pendingRequests' WHERE `member_id`='"  . $member_id . "'");
-            }
+                    if ((mysqli_num_rows($tenderExistsResult) == 0) && ($fileUploaded1 == true || $fileUploaded2==true || (empty($_FILES["uploaded_file"]["tmp_name"])))) {
+                    
+                        $query = "insert into user_tender_requests (member_id, tenderID, department_id, due_date, file_name,status,file_name2) 
+                    values('$member_id','$tender','$department_id','$due_date','$unique_filename1','Requested','$unique_filename2')";
+                        mysqli_query($db, $query);
+                    
+                    
+                        mysqli_query($db, "UPDATE members set `pending_request` ='$pendingRequests' WHERE `member_id`='"  . $member_id . "'");
+                    }
+            
             $adminEmail = "quotetenderindia@gmail.com";
             $mail = new PHPMailer(true);
 
@@ -218,7 +243,7 @@ if (isset($_POST['submit'])) {
                 if(!empty($memberData[4])){
                     $mail->addAttachment($upload_directory . $memberData[4]);
                 }
-                $mail->Body =  "<p> Dear user, <br/>" .
+                $mail->Body =  "<p> Dear " . $memberData[1] ." , <br/>" .
                     "The <b>Tender ID: </b> " .  $tender . "</b>  has been approved. Quotation file is attached below. For the further process, feel free to contact us.<br/><br/>
                 <strong>Thanks, <br /> Admin Quote Tender</strong> <br/>
                 Mobile: +91-9417601244 | Email: info@quotender.com ";
@@ -233,6 +258,7 @@ if (isset($_POST['submit'])) {
                 <strong><i class='feather icon-check'></i>Thanks!</strong>Your request sent successfully.We will contact you soon.
                 </div>
                 ";
+        }
         } else {
             $msg = "
             <div class='alert alert-danger alert-dismissible fade show' role='alert' style='font-size:16px;' id='goldmessage'>
@@ -384,7 +410,7 @@ $q = mysqli_query($db, $q);
                                 ?>
 
                                 <br />
-                                <form action="" method="post" autocomplete="off" enctype="multipart/form-data" id="myForm" autocomplete="off">
+                                <form action="" method="post" autocomplete="off" enctype="multipart/form-data" id="myForm">
                                     <div class="col-lg-12">
 
                                         <?php
@@ -1356,7 +1382,6 @@ $q = mysqli_query($db, $q);
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
         </script>
-
         <script>
             $(document).ready(function() {
                 $("#goldmessage").delay(8000).slideUp(300);
@@ -1386,24 +1411,15 @@ $q = mysqli_query($db, $q);
         </script>
 
 
+
 <script>
-    // Check if the replaceState method is supported by the browser
-    if (window.history.replaceState) {
-        // Replace the current state in the browser's history with a new state
-        window.history.replaceState(null, null, window.location.href);
-    }
+  if ( window.history.replaceState ) 
+  {
+    window.history.replaceState( null, null, window.location.href );
+  }
 </script>
-
-
-
-
-
 
 
 </body>
 
 </html>
-
-<?php
-    session_abort();
-?>

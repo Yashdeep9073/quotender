@@ -31,6 +31,7 @@ if(isset($_POST['tender_request_ids'])) {
 	$tender_request_ids = trim($_POST['tender_request_ids']);	
 	$sql = "DELETE FROM user_tender_requests WHERE id in ($tender_request_ids)";
 	$resultset = mysqli_query($db, $sql);
+	
 }
 
 

@@ -10,11 +10,36 @@ $name = $_SESSION['login_user'];
 
 include("db/config.php");
 
-$query = "SELECT sm.name, m.email_id, m.mobile, m.firm_name, ur.tender_no, department.department_name,ur.name_of_work,
-ur.remarked_at, ur.file_name, ur.id FROM user_tender_requests ur 
-inner join members m on ur.member_id= m.member_id
-inner join members sm on ur.selected_user_id= sm.member_id
-inner join department on ur.department_id = department.department_id where ur.remark='accepted'";
+$query = "SELECT 
+sm.name, 
+m.email_id, 
+m.mobile, 
+m.firm_name, 
+ur.tender_no, 
+department.department_name,
+ur.name_of_work,
+ur.remarked_at, 
+ur.file_name, 
+ur.id,
+se.section_name,
+dv.division_name,
+sd.subdivision
+FROM 
+    user_tender_requests ur 
+INNER JOIN 
+    members m ON ur.member_id= m.member_id
+INNER JOIN 
+    members sm ON ur.selected_user_id= sm.member_id
+INNER JOIN 
+    department ON ur.department_id = department.department_id 
+INNER JOIN 
+    section se on ur.section_id = se.section_id
+INNER JOIN
+    division dv on dv.section_id = ur.section_id
+INNER JOIN
+    sub_division sd ON ur.division_id = sd.division_id
+WHERE ur.remark='accepted'";
+
 $result = mysqli_query($db, $query);
 
 ?>
@@ -185,6 +210,9 @@ $result = mysqli_query($db, $query);
                                 echo "<th>User</th>";
                                 echo "<th>Tender No</th>";
                                 echo "<th>Department</th>";
+                                echo "<th>Section</th>";
+                                echo "<th>Division</th>";
+                                echo "<th>Sub-Division</th>";
                                 echo "<th>Work Name</th>";
 
                                 echo "<th>-</th>";
@@ -216,6 +244,9 @@ $result = mysqli_query($db, $query);
                                     . $row['3'] . "</span>" . "</td>";
                                     echo "<td>" . $row['4'] . "</td>";
                                     echo "<td>" . $row['5'] . "</td>";
+                                    echo "<td>" . $row['10'] . "</td>";
+                                    echo "<td>" . $row['11'] . "</td>";
+                                    echo "<td>" . $row['12'] . "</td>";
 
                                     echo "<td>"  . $row['6'] . "</td>";
 

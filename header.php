@@ -18,7 +18,7 @@
                <a href="submit-tender.php">How to Submit Tender </a>
             </li>
              <li>
-               <a href="login/index.php" class="lab-btn span">Admin Login</a>
+               <a href="login/index.php" class="">Admin Login</a>
             </li>
 
             <!-- <li>

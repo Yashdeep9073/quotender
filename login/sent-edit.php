@@ -31,6 +31,7 @@ if (isset($_POST['submit'])) {
         $newUserEmail = $_POST['email'];
         $phone = $_POST['phone'];
         $created_date = date('Y-m-d H:i:s A');
+        $tenderUpdateId = $_POST['tenderID'];
 
         $addMember = "insert into members (name, firm_name, email_id,mobile,created_date) values ('$name', '$firmname','$newUserEmail',
         '$phone','$created_date')";
@@ -49,7 +50,8 @@ if (isset($_POST['submit'])) {
     $allotted_at = date('Y-m-d H:i:s');
 
     mysqli_query($db, "UPDATE user_tender_requests set `status`='Allotted',`selected_user_id`='$user',
-    `reminder_days`='$days', `allotted_at`='$allotted_at' WHERE id='"  . $d . "'");
+    `reminder_days`='$days', `allotted_at`='$allotted_at',`tenderID`= '$tenderUpdateId' WHERE id = '"  . $d . "' 
+    ");
 
     $query = "SELECT email_id FROM members WHERE member_id='" . $user . "'";
 
@@ -129,7 +131,7 @@ INNER JOIN members ON user_tender_requests.member_id =members.member_id WHERE id
     </SCRIPT>");
 }
 
-$requestQuery = mysqli_query($db, "SELECT ur.tenderID, ur.tender_no, ur.reference_code, ur.name_of_work,
+$requestQuery = mysqli_query($db, "SELECT ur.tenderId, ur.tender_no, ur.reference_code, ur.name_of_work,
 department.department_name, s.section_name, ur.id 
 FROM user_tender_requests ur 
 inner join section s on ur.section_id=s.section_id
@@ -266,7 +268,7 @@ $members = mysqli_query($db, $memberQuery);
                                             <div class="form-group">Tender ID :*
                                                 <label class="sr-only control-label" for="name">Firm Name<span class=" ">
                                                     </span></label>
-                                                <input id="name" name="tender" type="text" placeholder=" Enter Tender No *" class="form-control input-md" required value="<?php echo $requestData[0]; ?>"  >
+                                                <input id="name" name="tenderID" type="text" placeholder=" Enter Tender No *" class="form-control input-md" required value="<?php echo $requestData[0]; ?>"  >
                                             </div>
                                         </div>
 

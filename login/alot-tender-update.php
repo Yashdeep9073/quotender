@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
     $allotted_at = date('Y-m-d H:i:s');
  
     mysqli_query($db, "UPDATE user_tender_requests set `status`='Allotted',`selected_user_id`='$user',
-    `reminder_days`='$days', `allotted_at`='$allotted_at' WHERE id='"  . $d . "'");
+    `reminder_days`='$days', `allotted_at`='$allotted_at'  WHERE id='"  . $d . "'");
     
     $query = "SELECT email_id FROM members WHERE member_id='" . $user . "'";
     

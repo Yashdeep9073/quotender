@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
             $stat = 1;
             $re = base64_encode($stat);
             
-            if($autoEmailResponse == "yes"){
+            if($autoEmailResponse == 1){
                 $mail = new PHPMailer(true);
     
                     //Enable SMTP debugging.
@@ -472,8 +472,8 @@ $sections = mysqli_query($db, $sectionQuery);
                                                 <select name="autoEmail" id="auto-email" class="form-control">
                                                     
                                                     <option value="">Select</option>
-                                                    <option value="yes">Yes</option>
-                                                    <option value="no">No</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
                                                     
                                                 </select>
                                             </div>
