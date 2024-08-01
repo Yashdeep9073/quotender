@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 31, 2024 at 02:37 PM
+-- Generation Time: Aug 01, 2024 at 08:20 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -586,7 +586,7 @@ INSERT INTO `members` (`member_id`, `name`, `firm_name`, `mobile`, `email_id`, `
 (238, 'Rakesh', 'VIS22', '8699790303', 'cleaningexpertaus@gmail.com', 'Vuxar', '202cb962ac59075b964b07152d234b70', '2024-07-22 00:22:32 AM', '1', '0', '0', '11', '9'),
 (241, 'Raj kumar', 'Sound Eng', '1234567890', 'rajk53080@gmail.com', 'jalandhar', 'e10adc3949ba59abbe56e057f20f883e', '2024-07-22 17:14:28 PM', '1', '619a2381b6479b3030e11d99019bc0a9', '', '140', '85'),
 (242, 'rakesh', 'VIS', '9870443528', 'rakeshrai71@gmail.com', 'Jal', '202cb962ac59075b964b07152d234b70', '2024-07-26 19:54:07 PM', '1', '0', '', '111', '110'),
-(244, 'Yashdeep', 'dj vfx smw', '1234567890', 'ydeep9073@gmail.com', 'jalandhar', 'e10adc3949ba59abbe56e057f20f883e', '2024-07-31 13:19:53 PM', '1', 'ae5a331f18f25534b9337ebb7a1ad411', '', '123', '122');
+(244, 'Yashdeep', 'dj vfx smw', '1234567890', 'ydeep9073@gmail.com', 'jalandhar', 'e10adc3949ba59abbe56e057f20f883e', '2024-07-31 13:19:53 PM', '1', 'ae5a331f18f25534b9337ebb7a1ad411', '', '123', '117');
 
 -- --------------------------------------------------------
 
@@ -1638,7 +1638,25 @@ INSERT INTO `user_logs` (`id`, `user_id`, `username`, `user_ip`, `login_time`) V
 (637, 'nq7dnu5j54pfule2ne3khsqbvi', '', '::1', '2024-07-31 13:18:45 PM'),
 (638, 'tgccaetgs714n8odcbuq9sn335', '', '::1', '2024-07-31 13:21:54 PM'),
 (639, 'qc5vc39tt71epcah4stvr3bicb', 'dvepl', '::1', '2024-07-31 16:59:46 PM'),
-(640, '44p024b39fj3ashb6q2jog6ejv', 'dvepl', '::1', '2024-07-31 17:07:28 PM');
+(640, '44p024b39fj3ashb6q2jog6ejv', 'dvepl', '::1', '2024-07-31 17:07:28 PM'),
+(641, 'rmb7g69qk7rtu3plqil3cir1lm', 'dvepl', '::1', '2024-07-31 18:43:05 PM'),
+(642, '1gdhffs3v6jfinkhj1oogvtq3e', 'dvepl', '::1', '2024-07-31 18:45:02 PM'),
+(643, '82jvribgu14ectt0bl11vslocs', 'dvepl', '::1', '2024-08-01 10:17:02 AM'),
+(644, 'revkqhb3sghjf7s75oobcnhoc9', 'dvepl', '::1', '2024-08-01 10:27:05 AM'),
+(645, 'kfkgcs25ojhnsp3er8t89t7o4o', 'dvepl', '::1', '2024-08-01 10:56:23 AM'),
+(646, '586pfluhv6dt4bb6gau0cbm9bq', 'dvepl', '::1', '2024-08-01 10:56:40 AM'),
+(647, 'h2odc4ch8lco3tf1c80h1j1p4m', '', '::1', '2024-08-01 10:57:57 AM'),
+(648, '6mp6595m8uko7mi3nic79db1qr', 'dvepl', '::1', '2024-08-01 11:03:57 AM'),
+(649, 'idbcmmmle1nj4cnphd51ttm8hg', 'dvepl', '::1', '2024-08-01 11:16:54 AM'),
+(650, 'tpmvorsrlgj371chn17371h5ed', 'dvepl', '::1', '2024-08-01 11:17:34 AM'),
+(651, 'qaqtqa15l2u0d23opj9vlhfov9', 'dvepl', '::1', '2024-08-01 11:20:36 AM'),
+(652, 'ltqr7fm1mudef7n4kvii8kmfl6', 'dvepl', '::1', '2024-08-01 11:20:50 AM'),
+(653, 'j6qpa50u494kn0jodkt5mmdpi4', 'dvepl', '::1', '2024-08-01 11:22:01 AM'),
+(654, 'j1d81v4nfrqm3f3cbs97ke9imi', 'dvepl', '::1', '2024-08-01 11:22:23 AM'),
+(655, 'k6st5874p5902n54bfh7hj5pjf', '', '::1', '2024-08-01 11:25:08 AM'),
+(656, '3b4bg6bij97r8r8lh63nal9022', 'dvepl', '::1', '2024-08-01 11:25:17 AM'),
+(657, '9qnr2n85ksfmqc0qgv3mpmmupv', 'dvepl', '::1', '2024-08-01 11:26:48 AM'),
+(658, 'bjcbg4ctmf9eogsgp7f64et48v', 'dvepl', '::1', '2024-08-01 11:27:08 AM');
 
 -- --------------------------------------------------------
 
@@ -1837,7 +1855,6 @@ INSERT INTO `user_tender_requests` (`id`, `member_id`, `tenderID`, `department_i
 (494, 221, 'ANAPURNA HOTEL AND R', 56, '2024-07-03 18:03:26', 'Sent', 'ANAPURNA HOTEL', 'ANAPURNA HOTEL, KANDRORI', '6695f64581035_Offer Report- LT PANEL - 13-Jul-2024 04 30 31 PM.pdf', ' 6543', '78', '2024-07-16 09:55:41', NULL, NULL, NULL, '2024-07-25 18:48:07', '', '', '2024-07-04', NULL, NULL, NULL, '', '122800', '1', '0'),
 (495, 221, 'BIOVONIC  AMRITSAR', 56, '2024-07-03 18:04:52', 'Sent', 'PRIVATE', 'BIOVONIC', '668cb2d3bb2d7_DRG-6359 (MAIN PANEL).pdf', '6359', '78', '2024-07-09 09:17:31', NULL, NULL, NULL, '2024-07-25 18:48:07', '', '', '2024-07-04', NULL, NULL, NULL, '', '650000', '1', '0'),
 (496, 83, '2024_MES_652848_1', 41, '2024-07-04 04:38:24', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-25 18:38:29', NULL, NULL, '2024-07-16', NULL, NULL, NULL, '', NULL, '0', '0'),
-(497, 83, '2024_MES_652848_1', 41, '2024-07-04 04:59:34', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-31 16:24:35', NULL, NULL, '2024-07-16', NULL, NULL, NULL, '', NULL, '0', '0'),
 (498, 224, 'ECR RLY', 51, '2024-07-04 05:00:58', 'Sent', 'ECR RAILWAY', 'Enquiry for supply of LT Panel ECR RLY', '668d2892c5ece_Offer Report- ECR RAILWAY - 06-Jul-2024 06 10 19 PM.pdf', '6557', '78', '2024-07-09 17:39:54', NULL, NULL, NULL, '2024-07-25 18:48:07', '', '', '2024-07-08', NULL, NULL, NULL, '', '1857300', '1', '0'),
 (500, 222, '2024_MES_652848_1', 41, '2024-07-04 07:54:25', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-25 18:38:29', NULL, NULL, '2024-07-09', NULL, NULL, NULL, '', NULL, '0', '0'),
 (502, 221, '2024_MES_649317_2', 41, '2024-07-04 08:29:17', 'Sent', 'CEJZ/JRC- /2024-25', 'ADDN/ ALTERATION TO BLDG. NO. P-1 OF MH JRC UNDER GE (EAST) JALANDHAR CANTT', '6688dcff8e1aa_DVEPL- OFFER CEJZJRC- 2024-25  6563.pdf', '6563', '58', '2024-07-06 11:28:23', NULL, NULL, NULL, '2024-07-25 18:48:07', '', '', '2024-07-16', NULL, NULL, NULL, '', '74000', '1', '0'),
@@ -1846,7 +1863,6 @@ INSERT INTO `user_tender_requests` (`id`, `member_id`, `tenderID`, `department_i
 (513, 222, '2023_MES_613925_1', 41, '2024-07-06 00:24:35', 'Allotted', 'GE/LDH-41/2023-24', ' SPECIAL REPAIR / REPLACEMENT OF LT PANELS AND FEEDER PANELS AT BADDOWAL AND CERTAIN SANCTIONED WORK AT DHOLEWAL UNDER GE LUDHIANA', '668b644516306_DVEPL- OFFER 41 GE-LDH-2023-24...5812.pdf', '5812', '58', '2024-07-08 09:30:05', 228, '2024-07-08 09:40:34', 15, '2024-07-26 11:13:55', '44', '', '2024-07-06', NULL, NULL, NULL, '', '1214000', '1', '0'),
 (514, 221, '2024_MES_651004_1   ', 41, '2024-07-06 08:20:24', 'Allotted', 'CWEAFJ-42/2023-24', 'SPECIAL REPAIR TO PARAMETER LIGHTS AND ELECTRICAL INFRASTRUCTURE AT AF STN UDHAMPUR', '668b6545e4767_DVEPL- OFFER 42-CWE-AFJ-2023-24  6400.pdf', '6400', '52', '2024-07-08 09:34:21', 229, '2024-07-08 09:58:15', 15, '2024-07-26 11:13:55', '17', '10', '2024-05-27', 'accepted', '2024-07-15 14:20:56', NULL, '', '652000', '1', '0'),
 (516, 83, ' 2024_MES_659984_1', 41, '2024-07-06 10:24:12', 'Sent', 'GE/PKT-12/2024-25', 'REPAIR/REPLACEMENT/IMPROVEMENT OF EXTERNAL ELECTRIC LT NETWORK SYSTEM AND CONNECTED WORKS IN ZONE A AND B UNDER GE(WEST) PATHANKOT', '66891ef2c1f46_DVEPL- OFFER 12- GE-PKT-2024-25   6567.pdf', '6567', '59', '2024-07-06 16:09:46', NULL, NULL, NULL, '2024-07-25 18:48:07', '48', '', '2024-07-06', NULL, NULL, NULL, '', '92000', '1', '0'),
-(517, 83, ' 2024_MES_659984_1', 41, '2024-07-06 11:04:37', 'Sent', 'GE/PKT-12/2024-25', 'REPAIR/REPLACEMENT/IMPROVEMENT OF EXTERNAL ELECTRIC LT NETWORK SYSTEM AND CONNECTED WORKS IN ZONE A AND B UNDER GE(WEST) PATHANKOT', '66891ef2c1f46_DVEPL- OFFER 12- GE-PKT-2024-25   6567.pdf', '6567', '59', '2024-07-06 16:34:37', NULL, NULL, NULL, '2024-07-25 18:48:07', '48', '', '2024-07-06', NULL, NULL, NULL, NULL, NULL, '1', '0'),
 (519, 83, ' 2024_MES_659815_1', 41, '2024-07-06 11:26:19', 'Allotted', ' GES/AKH-02/2024-25', 'SPECIAL REPAIR TO BLDG NO T 20 JCO MESS T39 T40 AND T41 TOILET AND BATHROOM T12 PM SHED T40 RATION CLOTHING AND TECH STORE AT RAKHMUTHI UNDER GE SOUTH AKHNOOR', '66892ad1774d4_DVEPL- OFFER 2- GES-AKH-2024-25   6569.pdf', '6569', '54', '2024-07-06 17:00:25', 232, '2024-07-18 09:46:37', 15, '2024-07-26 11:13:55', '23', '22', '2024-07-06', NULL, NULL, NULL, '', '24000', '1', '0'),
 (521, 222, '2024_MES_660435_1', 41, '2024-07-08 13:17:48', 'Sent', ' GE/HAL-19/2024-25', 'REPAIR / REPLACEMENT OF LT ELECTRIC SYSTEM AND EARTHING INFRASTRUCTURE IN TECHNICAL AREA AT AF STN HALWARA', '6692758841c8d_DVEPL- OFFER GE-HAL-19-2024-25 6589.pdf', '6589', '55', '2024-07-13 18:09:36', NULL, NULL, NULL, '2024-07-25 18:48:07', '29', '107', '2024-07-09', NULL, NULL, NULL, '', '99000', '1', '0'),
 (522, 222, '2023_MES_635127_2', 41, '2024-07-09 03:25:14', 'Sent', 'CWE/JAL/E-69/2023-24', 'Provn of 01 x Cold Room in Medical Store at Jalandhar Cantt under GE (East) JRC', '668d27b3dc95c_Offer Report- CWE_JAL_E-69_2023-24 - 09-Jul-2024 05 30 47 PM.pdf', '6572', '58', '2024-07-09 17:36:11', NULL, NULL, NULL, '2024-07-25 18:48:07', '45', '', '2024-07-10', NULL, NULL, NULL, '', '61800', '1', '0'),
@@ -1857,7 +1873,10 @@ INSERT INTO `user_tender_requests` (`id`, `member_id`, `tenderID`, `department_i
 (542, 231, '2023_MES_596487_1', 41, '2024-07-16 14:22:07', 'Allotted', ' CWE/JP-05/2023-24 ', 'PROVN OF VCB AND ALLIED ITEMS FOR DC LINES AT MIRAN SAHIB MIL STN UNDER GE JAMMU', '6699f61dee526_11 KV 800 A - VCB OFFER ICOG -5832.pdf', '5832', '59', '2024-07-19 10:44:05', 236, '2024-07-19 11:49:43', 15, '2024-07-26 11:13:55', '46', '79', '2023-06-13', NULL, NULL, NULL, '', '307264', '1', '0'),
 (546, 221, '2024_MES_651997_1', 41, '2024-07-22 06:43:24', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-25 18:38:29', NULL, NULL, '2024-05-30', NULL, NULL, NULL, '', NULL, '0', '0'),
 (547, 221, '2024_MES_652007_1', 41, '2024-07-22 06:45:29', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-25 18:38:29', NULL, NULL, '2024-05-30', NULL, NULL, NULL, '', NULL, '0', '0'),
-(548, 221, '2024_MES_652017_1', 41, '2024-07-22 06:49:16', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-25 18:38:29', NULL, NULL, '2024-05-30', NULL, NULL, NULL, '', NULL, '0', '0');
+(548, 221, '2024_MES_652017_1', 41, '2024-07-22 06:49:16', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-25 18:38:29', NULL, NULL, '2024-05-30', NULL, NULL, NULL, '', NULL, '0', '0'),
+(782, 244, 'mu123456', 37, '2024-07-31 07:40:22', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-31 19:48:36', NULL, NULL, '2024-07-31', NULL, NULL, NULL, '', NULL, '0', '0'),
+(783, 244, '123', 37, '2024-07-31 13:42:00', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-07-31 19:12:00', NULL, NULL, '2024-07-31', NULL, NULL, NULL, '', NULL, '0', '0'),
+(784, 244, '2024_iph', 37, '2024-08-01 04:57:58', 'Requested', NULL, NULL, '', NULL, '', NULL, NULL, NULL, NULL, '2024-08-01 10:27:58', NULL, NULL, '2024-08-01', NULL, NULL, NULL, '', NULL, '0', '0');
 
 -- --------------------------------------------------------
 
@@ -2105,13 +2124,13 @@ ALTER TABLE `tender`
 -- AUTO_INCREMENT for table `user_logs`
 --
 ALTER TABLE `user_logs`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=641;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=659;
 
 --
 -- AUTO_INCREMENT for table `user_tender_requests`
 --
 ALTER TABLE `user_tender_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=780;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=785;
 
 --
 -- AUTO_INCREMENT for table `web_content`

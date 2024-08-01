@@ -360,8 +360,12 @@ $result = mysqli_query($db, $query);
                                     }
 
                                     echo "<td>" . date_format(date_create($row['due_date']),"d-m-Y ") . "</td>";
-                                    echo "<td>" . date_format(date_create($row['created_at']),"d-m-Y ") . "</td>";
-                                    echo "<td>" . date_format(date_create($row['created_at']),"h:i A ") . "</td>";
+                                    $originalDate = $row['created_at'];
+                                    $timestamp = strtotime($originalDate);
+                                    $istDate = date('d-m-Y', $timestamp);
+                                    $istTime = date('h:i A', $timestamp + 5.5 * 3600);
+                                    echo "<td>" . $istDate . "</td>";
+                                    echo "<td>" . $istTime . "</td>";
 
                                     echo "<td>" .date_format(date_create($row['sent_at']),"d-m-Y ") . "<br/>" . '<a href="../login/tender/' . $row['file_name'] . '"  target="_blank"/>View file 1 </a> </br> ' ;
 
