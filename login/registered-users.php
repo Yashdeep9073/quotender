@@ -185,6 +185,7 @@ $result = mysqli_query($db, $query);
                                 echo "<th>Firm Name</th>";
                                 echo "<th>Mobile</th>";
                                 echo "<th>Email</th>";
+                                echo "<th>City</th>";
 
                                 echo "<th> Tender</th>";
                                 echo "<th>Edit</th>";
@@ -212,6 +213,7 @@ $result = mysqli_query($db, $query);
                                     echo "<td>" . $row['2'] . "</td>";
                                     echo "<td>" . $row['3'] . "</td>";
                                     echo "<td>" . $row['4'] . "</td>";
+                                    echo "<td>" . $row['5'] . "</td>";
                                     echo "<td>" . "Free: " . $row['11'] . "<br/> " . "<span style='color:green;'> " . " Balance: " . $row['12'] . "</span>" . "</td>";
 
 

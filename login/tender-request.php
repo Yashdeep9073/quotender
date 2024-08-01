@@ -40,8 +40,13 @@ FROM
 inner join 
     members m on ur.member_id= m.member_id
 inner join 
-    department on ur.department_id = department.department_id where ur.status= 'Requested' AND ur.delete_tender = '0' ORDER BY NOW() >= CAST(ur.due_date AS DATE),
-ABS(DATEDIFF(NOW(), CAST(ur.due_date AS DATE)))";
+    department on ur.department_id = department.department_id 
+where ur.status= 'Requested' AND ur.delete_tender = '0' 
+GROUP BY 
+ ur.id
+ORDER BY 
+ NOW() >= CAST(ur.due_date AS DATE), 
+ ABS(DATEDIFF(NOW(), CAST(ur.due_date AS DATE)))";
 
 $result = mysqli_query($db, $query);
 

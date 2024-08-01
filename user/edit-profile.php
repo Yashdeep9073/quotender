@@ -199,11 +199,11 @@ $member1 = mysqli_fetch_row($memberData1);
                                 <h5 class="m-b-10">Edit Profile
                                 </h5>
                             </div>
-                            <ul class="breadcrumb">
+                            <!-- <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.php"><i class="feather icon-home"></i></a>
                                 </li>
 
-                            </ul>
+                            </ul> -->
                         </div>
                     </div>
                 </div>

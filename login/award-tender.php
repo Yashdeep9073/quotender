@@ -10,7 +10,7 @@ $name = $_SESSION['login_user'];
 
 include("db/config.php");
 
-$query = "SELECT 
+$query = "SELECT DISTINCT
 sm.name, 
 m.email_id, 
 m.mobile, 
@@ -40,7 +40,11 @@ INNER JOIN
 INNER JOIN
     sub_division sd ON ur.division_id = sd.division_id
 WHERE ur.remark='accepted' AND ur.delete_tender = '0'
-
+GROUP BY 
+ ur.id
+ORDER BY 
+ NOW() >= CAST(ur.due_date AS DATE), 
+ ABS(DATEDIFF(NOW(), CAST(ur.due_date AS DATE)))
  ";
 
 $result = mysqli_query($db, $query);
