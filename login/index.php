@@ -10,12 +10,12 @@ if (!isset($_SESSION["login_user"])) {
         // username and password sent from form 
         include("db/config.php");
 
-        $myusername = mysqli_real_escape_string($db, $_POST['username']);
+        $myusername2 = mysqli_real_escape_string($db, $_POST['username']);
         $mypassword = mysqli_real_escape_string($db, $_POST['password']);
         $mypassword = md5($mypassword);
 
 
-        $sql = "SELECT * FROM admin WHERE username = '$myusername' and password = '$mypassword' and status='1'";
+        $sql = "SELECT * FROM admin WHERE username = '$myusername2' and password = '$mypassword' and status='1'";
         $result = mysqli_query($db, $sql);
         $adminData=mysqli_fetch_row($result);
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -51,14 +51,14 @@ if (!isset($_SESSION["login_user"])) {
         }
         $count = mysqli_num_rows($result);
 
-        // If result matched $myusername and $mypassword, table row must be 1 row
+        // If result matched $myusername2 and $mypassword, table row must be 1 row
 
         if ($count == 1) {
 
-            $_SESSION['login_user'] = $myusername;
+            $_SESSION['login_user'] = $myusername2;
             $_SESSION['login_user_id'] = $adminData[9];
 
-            /*?>setcookie('password',$myusername,time() + (86400 * 7));<?php */
+            /*?>setcookie('password',$myusername2,time() + (86400 * 7));<?php */
 
             $_SESSION['id'] = session_id(); // hold the user id in session
             $uip = $_SERVER['REMOTE_ADDR']; // get the user ip
