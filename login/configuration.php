@@ -5,7 +5,7 @@ include("db/config.php");
 if (!isset($_SESSION["login_user"])) {
     header("location: index.php");
 }
-
+$msg = null;
 $name = $_SESSION['login_user'];
 // Register user
 $result = mysqli_query($db, "SELECT * FROM  google_captcha ");
@@ -191,6 +191,11 @@ if (isset($_POST['submit1'])) {
 
                                 </h5>
                             </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.php"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#!"></a></li>
+                            </ul>
 
                         </div>
                     </div>
@@ -492,6 +497,12 @@ if (isset($_POST['submit1'])) {
         $("#goldmessage").delay(5000).slideUp(300);
     });
     </script>
+    <script>
+  if ( window.history.replaceState ) 
+  {
+    window.history.replaceState( null, null, window.location.href );
+  }
+</script>
 </body>
 
 </html>

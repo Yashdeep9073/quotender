@@ -172,6 +172,14 @@ while ($item = mysqli_fetch_row($adminPermissionResult)) {
                 ) {
                 ?>
                 <li class="nav-item">
+                    <a href="recyclebin.php" class="nav-link "><span class="pcoded-micon"><i class="feather icon-trash-2"></i></span><span class="">Recycle Bin</span></a>
+                </li>
+                
+                <?php } ?>
+                <?php if ((in_array('Registered Users', $permissions))|| (in_array('All', $permissions))
+                ) {
+                ?>
+                <li class="nav-item">
                     <a href="registered-users.php" class="nav-link "><span class="pcoded-micon"><i class="feather icon-globe"></i></span><span class="">Registered Users</span></a>
                 </li>
                 

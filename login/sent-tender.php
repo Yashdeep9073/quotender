@@ -56,8 +56,7 @@ INNER JOIN
  division dv ON ur.section_id = dv.section_id
 INNER JOIN
  sub_division sd ON ur.division_id = sd.division_id
-WHERE 
- ur.status = 'Sent'
+WHERE ur.status = 'Sent'AND ur.delete_tender = '0'
 GROUP BY 
  ur.id
 ORDER BY 
@@ -214,6 +213,11 @@ $result = mysqli_query($db, $query);
                                 <h5 class="m-b-10">Sent Tender
                                 </h5>
                             </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.php"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#!"></a></li>
+                            </ul>
 
                         </div>
                     </div>
@@ -266,8 +270,8 @@ $result = mysqli_query($db, $query);
                                 <?php
                                 if($allowedAction=='all'){
                                 echo"<div class='col-md row'>
-                                <a href='#' id='delete_records' class='btn btn-danger'> <i class='feather icon-trash'></i>  &nbsp;
-                                Delete Selected Items</a> &nbsp; &nbsp; &nbsp;   
+                                <a href='#' id='recycle_records' class='btn btn-danger'> <i class='feather icon-trash'></i>  &nbsp;
+                                Move to Bin Selected Items</a> &nbsp; &nbsp; &nbsp;   
 
                                 <a href='#' id='email_records' class='btn btn-primary'> <i class='feather icon-mail'></i>   
                                 Sent Email To Selected Items</a>
@@ -299,6 +303,7 @@ $result = mysqli_query($db, $query);
                                 echo "<th>Tentative Cost</th>";
                                 echo "<th>Due Date</th>";
                                 echo "<th>Date Added</th>";
+                                echo "<th>TIME Added</th>";
                                 echo "<th>Sent Date</th>";
                                 if($allowedAction=='all' || $allowedAction=='update' ){
                                 echo "<th>Edit</th>";
@@ -355,7 +360,8 @@ $result = mysqli_query($db, $query);
                                     }
 
                                     echo "<td>" . date_format(date_create($row['due_date']),"d-m-Y ") . "</td>";
-                                    echo "<td>" . date_format(date_create($row['created_at']),"d-m-Y:h:i A ") . "</td>";
+                                    echo "<td>" . date_format(date_create($row['created_at']),"d-m-Y ") . "</td>";
+                                    echo "<td>" . date_format(date_create($row['created_at']),"h:i A ") . "</td>";
 
                                     echo "<td>" .date_format(date_create($row['sent_at']),"d-m-Y ") . "<br/>" . '<a href="../login/tender/' . $row['file_name'] . '"  target="_blank"/>View file 1 </a> </br> ' ;
 
@@ -378,8 +384,8 @@ $result = mysqli_query($db, $query);
                                     echo "<br/>";echo "<br/>";
 
                                     if($allowedAction=='all'){
-                                        echo "<a href='#' id='" . $row['id'] . "'class='delbutton btn btn-danger' title='Click To Delete'> 
-                                        <i class='feather icon-trash'></i>  &nbsp; delete</a></td>";
+                                        echo "<a href='#' id='" . $row['id'] . "'class='recyclebutton btn btn-danger' title='Click To Delete'> 
+                                        <i class='feather icon-trash'></i>  &nbsp; Move to Bin</a></td>";
                                     }
                                     
                                     if($row['auto_quotation'] != 1){
@@ -470,7 +476,7 @@ $result = mysqli_query($db, $query);
     <script type="text/javascript">
     $(function() {
 
-        $(".delbutton").click(function() {
+        $(".recyclebutton").click(function() {
 
             let element = $(this);
 
@@ -480,7 +486,7 @@ $result = mysqli_query($db, $query);
             if (confirm("Are you sure you want to delete this Record?")) {
                 $.ajax({
                     type: "GET",
-                    url: "deleteuser.php",
+                    url: "recycleuser.php",
                     data: info,
                     success: function() {}
                 });
@@ -529,7 +535,7 @@ $result = mysqli_query($db, $query);
             return false;
         });
 
-        $('#delete_records').on('click', function(e) {
+        $('#recycle_records').on('click', function(e) {
                 e.preventDefault();
                 let requestIDs = [];
                 $(".request_checkbox:checked").each(function() {
@@ -544,7 +550,7 @@ $result = mysqli_query($db, $query);
                         let selected_values = requestIDs.join(",");
                         $.ajax({
                             type: "POST",
-                            url: "deleteuser.php",
+                            url: "recycleuser.php",
                             cache: false,
                             data: 'tender_sent_ids=' + selected_values,
                             success: function() {

@@ -119,6 +119,11 @@ $result = mysqli_query($db, $query);
                                 <h5 class="m-b-10">User Logs Report
                                 </h5>
                             </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.php"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#!"></a></li>
+                            </ul>
 
                         </div>
                     </div>

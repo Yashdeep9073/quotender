@@ -208,6 +208,11 @@ $activationToken = bin2hex(random_bytes(16)); // Replace with your activation to
                                 <h5 class="m-b-10">Add User
                                 </h5>
                             </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.php"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#!"></a></li>
+                            </ul>
 
                         </div>
                     </div>

@@ -7,6 +7,9 @@ if (!isset($_SESSION["login_user"])) {
 
 include("db/config.php");
 $name = $_SESSION['login_user'];
+
+$msg = null;
+
 // Register user
 if (isset($_POST['submit'])) {
     
@@ -163,10 +166,10 @@ function getcity(val) {
                                 <h5 class="m-b-10">Add Sub Division
                                 </h5>
                             </div>
-                            <ul class="breadcrumb">
+                                <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.php"><i class="feather icon-home"></i></a>
                                 </li>
-
+                                <li class="breadcrumb-item"><a href="#!"></a></li>
                             </ul>
                         </div>
                     </div>

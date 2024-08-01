@@ -23,7 +23,8 @@ ur.file_name,
 ur.id,
 se.section_name,
 dv.division_name,
-sd.subdivision
+sd.subdivision,
+ur.tenderID
 FROM 
     user_tender_requests ur 
 INNER JOIN 
@@ -38,7 +39,9 @@ INNER JOIN
     division dv on dv.section_id = ur.section_id
 INNER JOIN
     sub_division sd ON ur.division_id = sd.division_id
-WHERE ur.remark='accepted'";
+WHERE ur.remark='accepted' AND ur.delete_tender = '0'
+
+ ";
 
 $result = mysqli_query($db, $query);
 
@@ -152,6 +155,11 @@ $result = mysqli_query($db, $query);
                                 <h5 class="m-b-10"> List of Award Tender
                                 </h5>
                             </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.php"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#!"></a></li>
+                            </ul>
 
                         </div>
                     </div>
@@ -209,13 +217,14 @@ $result = mysqli_query($db, $query);
                                 echo "<th>SNO</th>";
                                 echo "<th>User</th>";
                                 echo "<th>Tender No</th>";
+                                echo "<th>Tender ID</th>";
                                 echo "<th>Department</th>";
                                 echo "<th>Section</th>";
                                 echo "<th>Division</th>";
                                 echo "<th>Sub-Division</th>";
                                 echo "<th>Work Name</th>";
 
-                                echo "<th>-</th>";
+                                echo "<th>Awarded At</th>";
 
 
                                 echo "<th>Status</th>";
@@ -243,6 +252,7 @@ $result = mysqli_query($db, $query);
                                     . "<span style='color:green;'> " . $row['2'] . "</span>" . "<br/>" . "<span style='color:orange;'> "
                                     . $row['3'] . "</span>" . "</td>";
                                     echo "<td>" . $row['4'] . "</td>";
+                                    echo "<td>" . $row['13'] . "</td>";
                                     echo "<td>" . $row['5'] . "</td>";
                                     echo "<td>" . $row['10'] . "</td>";
                                     echo "<td>" . $row['11'] . "</td>";
@@ -251,7 +261,7 @@ $result = mysqli_query($db, $query);
                                     echo "<td>"  . $row['6'] . "</td>";
 
 
-                                    echo "<td>" .  "Award Date :" . "<br/>" .date_format(date_create($row['7']),"Y-m-d ") . "<br/>" . '<a href="../login/tender/' . $row['8'] . '"  target="_blank"/>View file </a>' . "</td>";
+                                    echo "<td>" .  "Award Date :" . "<br/>" .date_format(date_create($row['7']),"d-m-Y h:i A") . "<br/>" . '<a href="../login/tender/' . $row['8'] . '"  target="_blank"/>View file </a>' . "</td>";
 
 
                                     $res = $row[9];

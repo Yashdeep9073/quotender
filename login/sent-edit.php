@@ -24,6 +24,9 @@ $d = base64_decode($en);
 if (isset($_POST['submit'])) {
     $user = $_POST['user'];
     $days = $_POST['day'];
+    //     // DEBUG
+    // echo"<pre>";
+    // print_r($_POST);
 
     if ($user == 'other') {
         $name = $_POST['name'];
@@ -31,7 +34,7 @@ if (isset($_POST['submit'])) {
         $newUserEmail = $_POST['email'];
         $phone = $_POST['phone'];
         $created_date = date('Y-m-d H:i:s A');
-        $tenderUpdateId = $_POST['tenderID'];
+        // $tenderUpdateId = $_POST['tenderID'];
 
         $addMember = "insert into members (name, firm_name, email_id,mobile,created_date) values ('$name', '$firmname','$newUserEmail',
         '$phone','$created_date')";
@@ -50,7 +53,7 @@ if (isset($_POST['submit'])) {
     $allotted_at = date('Y-m-d H:i:s');
 
     mysqli_query($db, "UPDATE user_tender_requests set `status`='Allotted',`selected_user_id`='$user',
-    `reminder_days`='$days', `allotted_at`='$allotted_at',`tenderID`= '$tenderUpdateId' WHERE id = '"  . $d . "' 
+    `reminder_days`='$days', `allotted_at`='$allotted_at' WHERE id = '"  . $d . "' 
     ");
 
     $query = "SELECT email_id FROM members WHERE member_id='" . $user . "'";
@@ -131,11 +134,11 @@ INNER JOIN members ON user_tender_requests.member_id =members.member_id WHERE id
     </SCRIPT>");
 }
 
-$requestQuery = mysqli_query($db, "SELECT ur.tenderId, ur.tender_no, ur.reference_code, ur.name_of_work,
+$requestQuery = mysqli_query($db, "SELECT ur.tenderID, ur.tender_no, ur.reference_code, ur.name_of_work,
 department.department_name, s.section_name, ur.id 
 FROM user_tender_requests ur 
 inner join section s on ur.section_id=s.section_id
-inner join department on ur.department_id = department.department_id where ur.id='"  . $d . "'");
+inner join department on ur.department_id = department.department_id where ur.id = '"  . $d . "'");
 
 $requestData = mysqli_fetch_row($requestQuery);
 
@@ -267,8 +270,9 @@ $members = mysqli_query($db, $memberQuery);
                                         <div class="col-xl-6 col-lg-6 col-md-4 col-sm-12 col-12">
                                             <div class="form-group">Tender ID :*
                                                 <label class="sr-only control-label" for="name">Firm Name<span class=" ">
-                                                    </span></label>
-                                                <input id="name" name="tenderID" type="text" placeholder=" Enter Tender No *" class="form-control input-md" required value="<?php echo $requestData[0]; ?>"  >
+                                                    </span>
+                                                </label>
+                                                <input id="name" name="tenderID" type="text" placeholder=" Enter Tender No *" class="form-control input-md" required value="<?php echo $requestData[0]; ?>" readonly=""  >
                                             </div>
                                         </div>
 
@@ -325,10 +329,10 @@ $members = mysqli_query($db, $memberQuery);
 
                                                 echo "<select class='form-control' name='user' required id='myDropdown'>
                                                 <option value=''>Select User</option>";
-                                                while ($row = mysqli_fetch_row($members)) {
+                                                while ($row = mysqli_fetch_assoc($members)) {
 
 
-                                                    echo "<option value='" . $row['0'] . "'>" . $row['0'] . "-" . $row['1'] . "-" . $row['2'] . "-" . $row['3'] . "</option>";
+                                                    echo "<option value='" . $row['member_id'] . "'>" . $row['member_id'] ."--". $row['name'] . "--" . $row['firm_name'] . "--" . $row['mobile'] . "--" . $row['email_id'] . "</option>";
                                                 }
 
                                                 echo '<option value="other">Other</option>';
@@ -394,11 +398,13 @@ $members = mysqli_query($db, $memberQuery);
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
 
-                                            <button type="submit" class="btn btn-secondary" name="submit" id="submit">
+                                            <button type="submit" class="btn btn-primary" name="submit" id="submit">
                                                 <i class="feather icon-save lg"></i>&nbsp; Submit
                                             </button>
 
                                         </div>
+
+                                        
                                     </div>
                                 </div>
                             </form>

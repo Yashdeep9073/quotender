@@ -151,9 +151,6 @@ $type = $row11[5];
                                 <li class="breadcrumb-item"><a href="index.php"><i class="feather icon-home"></i></a>
                                 </li>
                                 <li class="breadcrumb-item"><a href="#!">Dashbaord</a></li>
-
-
-
                             </ul>
 
 
@@ -217,7 +214,7 @@ $type = $row11[5];
                 <div class="col-md-6 col-xl-3">
                     <div class="card bg-c-red order-card">
                         <div class="card-body">
-                            <h6 class="text-white">Award Tender</h6>
+                            <h6 class="text-white">Alot Tender</h6>
                             <h2 class="text-right text-white"><i class="feather icon-home float-left"></i><span
                                     id="category"></span></h2>
 
