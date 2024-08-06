@@ -46,7 +46,7 @@ if (!isset($_SESSION["login_register"])) {
         $result = mysqli_query($db, $sql);
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         $active = $row['active'];
-
+        $userLogin = $row['name'];
         $count = mysqli_num_rows($result);
 
         // If result matched $myusername and $mypassword, table row must be 1 row
@@ -54,14 +54,43 @@ if (!isset($_SESSION["login_register"])) {
         if ($count == 1) {
 
             $_SESSION['login_register'] = $myusername;
+            $_SESSION['login_username'] = $userLogin;
 
             /*?>setcookie('password',$myusername,time() + (86400 * 7));<?php */
 
             $_SESSION['id'] = session_id(); // hold the user id in session
-            $uip = $_SERVER['REMOTE_ADDR']; // get the user ip
+            $ipAddress = $_SERVER['REMOTE_ADDR']; // get the user ip
+
+            // Your API Key from ipinfo.io (you can use a free tier key or subscribe for more features)
+            $accessToken = 'c922e696cae131'; // Replace with your ipinfo.io token
+
+            // IPinfo API endpoint
+            $url = "http://ipinfo.io/{$ipAddress}/json?token={$accessToken}";
+
+            // Initialize a cURL session
+            $ch = curl_init();
+
+            // Set cURL options
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+            // Execute the cURL session and get the response
+            $response = curl_exec($ch);
+
+            // Close cURL session
+            curl_close($ch);
+
+            // Decode the JSON response
+            $data = json_decode($response, true);
+            
+            $ip = $data['ip'];
+            $city = $data['city'];
+            $region = $data['region'];
+
             date_default_timezone_set('Asia/Kolkata');
             $action = date('Y-m-d H:i:s A'); // query for inser user log in to data base
-            mysqli_query($db, "insert into user_logs(user_id,username,user_ip,login_time) values('" . $_SESSION['id'] . "','" . $_SESSION['login_user'] . "','$uip','$action')");
+
+            mysqli_query($db, "insert into user_logs(user_id,username,user_ip,login_time,city,region) values('" . $_SESSION['id'] . "','" . $_SESSION['login_username'] . "','$ip','$action','$city','$region')");
 
             session_regenerate_id(true);
             $st = 1;

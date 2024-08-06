@@ -13,7 +13,7 @@ include("db/config.php");
 
 
 
-$query = "SELECT * FROM user_logs ORDER BY id ASC  ";
+$query = "SELECT * FROM user_logs ORDER BY id ASC ";
 $result = mysqli_query($db, $query);
 
 ?>
@@ -152,6 +152,7 @@ $result = mysqli_query($db, $query);
                                 echo "<th>Id</th>";
                                 echo "<th>Username</th>";
                                 echo "<th>User IP</th>";
+                                echo "<th>Location</th>";
                                 echo "<th>Login Time</th>";
 
 
@@ -170,6 +171,7 @@ $result = mysqli_query($db, $query);
                                     echo "<td>" . $row['0'] . "</td>";
                                     echo "<td>" . $row['2'] . "</td>";
                                     echo "<td>" . $row['3'] . "</td>";
+                                    echo "<td>" . $row['5'] . "</td>";
                                     echo "<td>" . $row['4'] . "</td>";
 
                                     echo "</tr>";

@@ -39,6 +39,13 @@ if(isset($_POST['alot_request_ids'])) {
 	$resultset = mysqli_query($db, $sql);
 }
 
+if(isset($_POST['tender_recycle_ids'])) {
+	$tender_recycle_ids = trim($_POST['tender_recycle_ids']);	
+	$sql = "DELETE FROM user_tender_requests WHERE id in ($tender_recycle_ids)";
+	$resultset = mysqli_query($db, $sql);
+	
+}
+
 if(isset($_POST['member_ids'])) {
 	$member_ids = trim($_POST['member_ids']);	
 	$sql = "DELETE FROM members WHERE member_id in ($member_ids)";

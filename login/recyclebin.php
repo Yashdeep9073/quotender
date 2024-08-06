@@ -10,6 +10,17 @@ $name = $_SESSION['login_user'];
 
 include("db/config.php");
 
+$adminID= $_SESSION['login_user_id'];
+$adminPermissionQuery = "SELECT nm.title FROM admin_permissions ap 
+INNER JOIN navigation_menus nm ON ap.navigation_menu_id = nm.id WHERE ap.admin_id='" . $adminID . "'";
+$adminPermissionResult = mysqli_query($db, $adminPermissionQuery);
+
+while ($row = mysqli_fetch_row($adminPermissionResult)) {
+    $userPermissions[]=$row[0];
+}
+$allowedAction=!in_array('All',$userPermissions) && in_array( 'Update Tenders',$userPermissions) ? 'update' :
+ (!in_array('All',$userPermissions) && in_array( 'View Tenders',$userPermissions) ? 'view' : 'all');
+
 $query = "SELECT 
 m.member_id,
 utr.tenderID,
@@ -155,6 +166,17 @@ $result = mysqli_query($db, $query);
                             <div class="dt-responsive table-responsive">
 
                                 <?php
+                                if($allowedAction=='all'){
+                                    echo "<a href='#' id='delete_records' class='btn btn-danger'> <i class='feather icon-trash'></i>  &nbsp;
+                                    Delete Selected Items</a>";
+                                }
+                                
+                                if($allowedAction=='all' || $allowedAction=='update' ){
+                                    echo"<a href='#' class='restore_records px-1'><button type='button' class='btn btn-warning'>
+                                    <i class='feather icon-refresh-ccw'></i> &nbsp;Restore Selected Items</button>
+                                    </a>   
+                                    </div> <br />";
+                                }
 
                                 if (isset($_GET['status'])) {
                                     $st = $_GET['status'];
@@ -162,24 +184,22 @@ $result = mysqli_query($db, $query);
 
                                     if ($st1 > 0) {
                                         echo " <div class='alert alert-success alert-dismissible fade show' role='alert' style='font-size:16px;' id='updateuser'>
-  <strong><i class='feather icon-check'></i>Thanks!</strong> Members details has been Updated Successfully.
-  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-    <span aria-hidden='true'>&times;</span>
-  </button>
-</div> ";
+                                    <strong><i class='feather icon-check'></i>Thanks!</strong> Members details has been Updated Successfully.
+                                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                        <span aria-hidden='true'>&times;</span>
+                                    </button>
+                                    </div> ";
                                     } else {
-
-                                        echo " <div class='alert alert-danger alert-dismissible fade show' role='alert' style='font-size:16px;' id='updateuser'>
-  <strong>Error!</strong> Members details been not Updated
-  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-    <span aria-hidden='true'>&times;</span>
-  </button>
-</div> ";
+                                    echo " <div class='alert alert-danger alert-dismissible fade show' role='alert' style='font-size:16px;' id='updateuser'>
+                                    <strong>Error!</strong> Members details been not Updated
+                                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                    </button>
+                                    </div> ";
                                     }
                                 }
-
                                 ?>
-                                <br />
+                                <br/>
 
 
                                 <?php
@@ -207,20 +227,17 @@ $result = mysqli_query($db, $query);
                                 echo "<tbody>";
                                 while ($row = mysqli_fetch_row($result)) {
 
-                                    echo "<tr class='record' id='" . $row[0] . "'>";
+                                    echo "<tr class='record'>";
                                     echo "<td><div class='custom-control custom-checkbox'>
-                                    <input type='checkbox' class='custom-control-input member_checkbox' id='customCheck" . $count . "' data-member-id='" . $row[0] . "'>
-                                    <label class='custom-control-label' for= 'customCheck" . $count . "'>" . $count . "</label>
+                                    <input type='checkbox' class='custom-control-input request_checkbox' id='customCheck" . $row[6] . "' data-request-id='" . $row[6] . "'>
+                                    <label class='custom-control-label' for= 'customCheck" . $row[6] . "'>" . $count . "</label>
                                 </div>
                                 </td>";
-
                                     echo "<td>" . $row[1] . "</td>";
                                     echo "<td>" . $row[2] . "</td>";
                                     echo "<td>" . $row[3] . "</td>";
                                     echo "<td>" . $row[4] . "</td>";
                                     echo "<td>" . $row[5] . "</td>";
-
-
                                     $res = $row[6];
                                     $ree = base64_encode($res);
                                     echo "<td>
@@ -230,16 +247,12 @@ $result = mysqli_query($db, $query);
                                     <a href='#' id='" . $row[6] . "' class='delbutton btn btn-danger' title='Click To Delete'> 
                                     <i class='feather icon-trash'></i>  &nbsp; Permanent Delete</a>
                                     </td>";
-
                                     echo "</tr>";
                                     $count++;
                                 }
-
-
                                 echo "</tfoot>";
                                 echo "</table>";
                                 ?>
-
                             </div>
                         </div>
                     </div>
@@ -279,6 +292,7 @@ $result = mysqli_query($db, $query);
 
     <script>
         $(document).ready(function() {
+            //single delete Button
             $("#basic-btn").on('click','.delbutton', function() {
 
                 let element = $(this);
@@ -305,7 +319,7 @@ $result = mysqli_query($db, $query);
                 }
                 return false;
             });
-
+            //single delete restore
             $("#basic-btn").on('click','.restorebutton', function() {
 
             let element = $(this);
@@ -332,6 +346,89 @@ $result = mysqli_query($db, $query);
             }
         return false;
         });
+
+            //multiple delete Button
+            $('#delete_records').on('click', function(e) {
+                let requestIDs = [];
+
+                $(".request_checkbox:checked").each(function() {
+                    requestIDs.push($(this).data('request-id'));
+                });
+
+                if (requestIDs.length <= 0) {
+                    alert("Please select records.");
+                } 
+                else {
+                    WRN_PROFILE_DELETE = "Are you sure you want to delete " + (requestIDs.length > 1 ? "these" : "this") + " Record" + (requestIDs.length > 1 ? "s?" : "?");
+                    let checked = confirm(WRN_PROFILE_DELETE);
+                    if (checked == true) {
+                        let selected_values = requestIDs.join(",");
+                        $.ajax({
+                            type: "POST",
+                            url: "deleteuser.php",
+                            cache: false,
+                            data: 'tender_recycle_ids=' + selected_values,
+                            success: function(response) {
+                                $(".request_checkbox:checked").each(function(){
+                                    $(this).closest(".record").animate({
+                                        backgroundColor:"#FF3"
+                                    },"fast").animate({
+                                        opacity:"hide"
+                                    },"slow",function(){
+                                        $(this).remove();
+                                    });
+                                });
+                                setInterval(function(){
+                                    window.location.reload();
+                                },2000);
+                                
+                            }
+                        });
+                    }
+                }
+            });
+        
+            //multiple restore Button
+            $('.restore_records').on('click', function(e) {
+                let requestIDs = [];
+
+                $(".request_checkbox:checked").each(function() {
+                    requestIDs.push($(this).data('request-id'));
+                });
+
+                if (requestIDs.length <= 0) {
+                    alert("Please select records.");
+                } 
+                else {
+                    WRN_PROFILE_DELETE = "Are you sure you want to restore " + (requestIDs.length > 1 ? "these" : "this") + " Record" + (requestIDs.length > 1 ? "s?" : "?");
+                    let checked = confirm(WRN_PROFILE_DELETE);
+                    if (checked == true) {
+                        let selected_values = requestIDs.join(",");
+                        $.ajax({
+                            type: "POST",
+                            url: "restoreuser.php",
+                            cache: false,
+                            data: 'tender_recycle_ids=' + selected_values,
+                            success: function(response) {
+                                $(".request_checkbox:checked").each(function(){
+                                    $(this).closest(".record").animate({
+                                        backgroundColor:"#FF3"
+                                    },"fast").animate({
+                                        opacity:"hide"
+                                    },"slow",function(){
+                                        $(this).remove();
+                                    });
+                                });
+                                setInterval(function(){
+                                    window.location.reload();
+                                },2000);
+                                
+                            }
+                        });
+                    }
+                }
+            });
+
 
     });
     </script>

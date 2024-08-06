@@ -11,3 +11,9 @@ if (isset($_GET['id'])) {
 }
 
 
+if(isset($_POST['tender_recycle_ids'])) {
+	$tender_recycle_ids = trim($_POST['tender_recycle_ids']);	
+	$sql = "UPDATE user_tender_requests set delete_tender = '0' where id in ($tender_recycle_ids)";
+	$resultset = mysqli_query($db, $sql);
+	
+}
